@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
+    jshintrc: grunt.file.readJSON('.jshintrc'),
     banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
       '* <%= pkg.homepage %>\n' +
@@ -36,19 +37,24 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      options: {
-        jshintrc: '.jshintrc',        
-      },
+      options: '<%= jshintrc %>',
       node: {
         src: ['Gruntfile.js', 'app/server/**/*.js', 'test/**/*.js']
       },
       browser: {
         options: {
           globals: {
-            angular: false
+            'window': true,
+            'location': true,
+            'document': true
           }
         },
         src: ['app/public/**/*.js']
+      }
+    },
+    less: {
+      all: {
+        files: {}
       }
     },
     
@@ -73,11 +79,15 @@ module.exports = function(grunt) {
       js: {
         files: ['<%= jshint.node.src %>','<%= jshint.browser.src %>'],
         tasks: ['jshint']
+      },
+      less: {
+        files: ['app/**/*.less'],
+        tasks: ['less']
       }
     }
   });
 
-  grunt.registerTask('default', ['update_json', 'jshint', 'bower', 'concurrent']);
+  grunt.registerTask('default', ['update_json', 'jshint', 'less', 'bower', 'concurrent']);
   grunt.registerTask('zip', ['concat', 'uglify']);
   grunt.registerTask('test', ['jshint']);
 

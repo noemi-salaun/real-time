@@ -4,6 +4,7 @@ var path = require('path');
 var express = require('express');
 var app = module.exports = express();
 var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 // Set global const.
 global.ROOT_DIR = path.resolve(__dirname + '/../..');
@@ -13,10 +14,29 @@ global.PUBLIC_DIR = path.resolve(global.APP_DIR + '/public');
 global.SHARED_DIR = path.resolve(global.APP_DIR + '/shared');
 global.BOWER_DIR = path.resolve(global.ROOT_DIR + '/bower_components');
 
+// Page routing.
+app.get('/', function(req, res) {
+  res.sendfile(global.SERVER_DIR + '/index.html');
+});
+
 // Static resources routing.
 app.use('/public', express.static(global.PUBLIC_DIR));
 app.use('/shared', express.static(global.SHARED_DIR));
 app.use('/bower', express.static(global.BOWER_DIR));
+
+var controller = require('./controller');
+controller.initialize(10, io.sockets);
+controller.start();
+
+// Socket routing.
+io.sockets.on('connection', function(socket) {  
+  socket.on('newCube', function(/*msg/*, fn*/) {
+    controller.newCube();
+  });
+  socket.on('input', function(msg/*, fn*/) {
+    controller.handleInput(msg);
+  });
+});
 
 // Start listening.
 server.listen(3000, function() {
