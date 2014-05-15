@@ -19,7 +19,10 @@ var controller = {
     this.game.cube = new Cube();
   },
   handleInput: function(input) {
-    this.game.handleInput(input);
+    var self = this;
+    setTimeout(function() {
+      self.game.handleInput(input);
+    }, 500);
   }
 };
 

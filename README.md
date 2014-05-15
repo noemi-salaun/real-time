@@ -4,7 +4,7 @@ Real Time
 [![devDependency Status](https://david-dm.org/Duvo/real-time/dev-status.svg?theme=shields.io)](https://david-dm.org/Duvo/real-time#info=devDependencies)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-> JS implementation of online multiplayer game architecture.
+> JS implementation of online multiplayer game architecture. Based on [Gabriel Gambetta tutorial](http://www.gabrielgambetta.com/fast_paced_multiplayer.html).
 
 ## Installation
 

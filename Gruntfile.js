@@ -70,7 +70,7 @@ module.exports = function(grunt) {
         script: 'app/server/server.js',
         options: {
           nodeArgs: ['--debug'],
-          watch: ['./app/server/**', './app/shared/**'],
+          watch: ['app/server/**', 'app/shared/**'],
           cwd: __dirname
         }
       }

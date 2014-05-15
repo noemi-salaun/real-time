@@ -33,7 +33,7 @@ Game.prototype.tick = function() {
 };
 
 Game.prototype.broadcast = function() {
-  this.sockets.emit('world', {world: this.getWorld()});
+  this.sockets.emit('world', this.getWorld());
 };
 
 Game.prototype.stop = function() {
@@ -43,11 +43,11 @@ Game.prototype.stop = function() {
 };
 
 Game.prototype.handleInput = function(input) {
-  this.cube.inputs.push({action: input.action, press: input.press, time: new Date().getTime()});
+  this.cube.inputs.push(input);
 };
 
 Game.prototype.getWorld = function() {
-  return {cube: this.cube};
+  return {cube: this.cube === null ? null : this.cube.stats};
 };
 
 module.exports = Game;

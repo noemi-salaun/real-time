@@ -29,10 +29,8 @@ controller.initialize(10, io.sockets);
 controller.start();
 
 // Socket routing.
-io.sockets.on('connection', function(socket) {  
-  socket.on('newCube', function(/*msg/*, fn*/) {
-    controller.newCube();
-  });
+io.sockets.on('connection', function(socket) {
+  controller.newCube();
   socket.on('input', function(msg/*, fn*/) {
     controller.handleInput(msg);
   });
