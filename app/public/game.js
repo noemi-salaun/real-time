@@ -1,5 +1,5 @@
 'use strict';
-/* global createjs, Hero */
+/* global createjs, Cube */
 
 (function(window) {
   var Game = function() {
@@ -11,10 +11,10 @@
     this.stage = new createjs.Stage('mainCanvas');
     this.world = new createjs.Container();
     this.stage.addChild(this.world);
-    this.hero = new Hero();
-    this.hero.x = 100;
-    this.hero.y = 100;
-    this.world.addChild(this.hero);
+    this.cube = new Cube();
+    this.cube.x = 100;
+    this.cube.y = 100;
+    this.world.addChild(this.cube);
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', function() {

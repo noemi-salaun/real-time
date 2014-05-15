@@ -10,8 +10,8 @@ var socket = io.connect(host);
 socket.on('connect', function() {
 
   socket.on('world', function(data) {
-    game.hero.x = data.world.cube.position.x;
-    game.hero.y = data.world.cube.position.y;
+    game.cube.x = data.world.cube.position.x;
+    game.cube.y = data.world.cube.position.y;
   });
 
   // Création du cube.
