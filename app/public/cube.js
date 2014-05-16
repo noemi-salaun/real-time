@@ -2,6 +2,8 @@
 /* global createjs */
 
 (function(window) {
+  var colors = ['red', 'blue', 'green', 'grey'];
+
   var Cube = function(world) {
     this.initialize(world);
   };
@@ -14,8 +16,8 @@
     this.Shape_initialize();
 
     this.stats = null;
-
-    this.graphics.beginFill('red').drawRect(-20, -20, 40, 40);
+    var random = Math.floor(Math.random() * (colors.length - 1));
+    this.graphics.beginFill(colors[random]).drawRect(-20, -20, 40, 40);
     this.setBounds(-20, -20, 40, 40);
     world.addChild(this);
   };
