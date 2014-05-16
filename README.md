@@ -22,7 +22,11 @@ Real Time
 
     npm install
     
-### Todos
+### To build, test, make coffee and start the server
+
+    grunt
+    
+## Todos
 
 - ~~Client-side prediction~~
 - ~~Server reconciliation~~
