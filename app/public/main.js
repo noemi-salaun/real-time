@@ -6,7 +6,6 @@ var socket = io.connect(host);
 
 // Connexion au socket.
 socket.on('connect', function() {
-
   var game = new Game(socket);
 
   var keyBind = {

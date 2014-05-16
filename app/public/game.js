@@ -41,8 +41,11 @@
     this.socket = socket;
     this.serverMessages = [];
     var self = this;
-    self.socket.on('world', function(data) {
-      self.serverMessages.push(data);
+    this.socket.emit('new', null, function(id) {
+      self.cubeId = id;
+      self.socket.on('world', function(data) {
+        self.serverMessages.push(data);
+      });
     });
   };
 
@@ -63,12 +66,13 @@
 
   Game.prototype.processServerMessages = function() {
     var message;
-    while (message = this.serverMessages.shift()) {
+    while (message = this.serverMessages.shift()) {      
+      var stats = message[this.cubeId];
+      
       if (this.cube === null) {
         this.cube = new Cube(this.world);
       }
-
-      this.cube.stats = message.cube;
+      this.cube.stats = stats.cube;
 
       if (window.SERVER_RECONCILIATION) {
         // Server Reconciliation. Re-apply all the inputs not yet processed by
@@ -76,7 +80,7 @@
         var i = 0;
         while (i < this.pendingInputs.length) {
           var input = this.pendingInputs[i];
-          if (input.inputSequenceNumber <= message.lastProcessedInput) {
+          if (input.inputSequenceNumber <= stats.lastProcessedInput) {
             // Already processed. Its effect is already taken into account
             // into the world update we just got, so we can drop it.
             this.pendingInputs.splice(i, 1);

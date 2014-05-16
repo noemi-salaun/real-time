@@ -8,7 +8,9 @@ function Game(frequency, sockets, lag) {
 }
 
 Game.prototype.initialize = function(frequency, sockets) {
-  this.cube = null;
+  this.lastId = 0;
+  this.cubes = [];
+  this.lastProcessedInput = [];
 
   this.initSockets(sockets);
 
@@ -43,18 +45,16 @@ Game.prototype.initSockets = function(sockets) {
   this.serverMessages = [];
   var self = this;
   this.sockets.on('connection', function(socket) {
-    if (self.cube === null) {
-      self.cube = new Cube();
-    }
-    socket.on('input', function(data) {
-      // Lag simulation on demand.
-      if (self.lag) {
-        setTimeout(function() {
-          self.serverMessages.push(data);
-        }, self.lag);
-      } else {
-        self.serverMessages.push(data);
-      }
+    socket.on('new', function(data, callback) {
+      var socketId = socket.id;
+      self.cubes[socketId] = new Cube();
+
+      socket.on('input', function(data) {
+        data.id = socketId;
+        self.handleInput(data);
+      });
+
+      callback(socketId);
     });
   });
 
@@ -63,6 +63,18 @@ Game.prototype.initSockets = function(sockets) {
 Game.prototype.validateInput = function(/* input */) {
   // this.interval
   return true;
+};
+
+Game.prototype.handleInput = function(input) {
+  // Lag simulation on demand.
+  var self = this;
+  if (this.lag) {
+    setTimeout(function() {
+      self.serverMessages.push(input);
+    }, this.lag);
+  } else {
+    this.serverMessages.push(input);
+  }
 };
 
 Game.prototype.processInputs = function() {
@@ -74,8 +86,8 @@ Game.prototype.processInputs = function() {
     // We just ignore inputs that don't look valid; this is what prevents
     // clients from cheating.
     if (this.validateInput(message)) {
-      this.cube.applyInput(message);
-      this.lastProcessedInput = message.inputSequenceNumber;
+      this.cubes[message.id].applyInput(message);
+      this.lastProcessedInput[message.id] = message.inputSequenceNumber;
     }
   }
 };
@@ -85,14 +97,15 @@ Game.prototype.broadcast = function() {
 };
 
 Game.prototype.getWorld = function() {
-  if (this.cube === null) {
-    return null;
-  } else {
-    return {
-      cube: this.cube.stats,
-      lastProcessedInput: this.lastProcessedInput
+  var result = {};
+  for (var id in this.cubes) {
+    var cube = this.cubes[id];
+    result[id] = {
+      cube: cube.stats,
+      lastProcessedInput: this.lastProcessedInput[id]
     };
   }
+  return result;
 };
 
 module.exports = Game;

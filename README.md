@@ -30,7 +30,7 @@ Real Time
 
 - ~~Client-side prediction~~
 - ~~Server reconciliation~~
-- Separate client
+- ~~Separate client~~
 - Multiplayer
 - Interpolation
 - Lag compensation

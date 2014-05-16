@@ -8,7 +8,7 @@ Cube.prototype.initialize = function() {
   this.stats = {
     x: 200,
     y: 100,
-    speed: 40
+    speed: 100
   };
 };
 
