@@ -8,9 +8,9 @@ Cube.prototype.initialize = function() {
   //SHARED
   this.stats = {
     x: 200,
-    y: 100    
+    y: 100,
+    speed: 40
   };
-  this.speed = 40;
   this.inputs = [];
 };
 
@@ -28,8 +28,9 @@ Cube.prototype.process = function(start, stop) {
   var interval = stop - start;
   this.inputs.forEach(function(input) {    
     if (self.validateInput(interval, input)) {
-      self.stats.y += (-input.up + input.down) * self.speed;
-      self.stats.x += (-input.left + input.right) * self.speed;
+      self.stats.y += (-input.up + input.down) * self.stats.speed;
+      self.stats.x += (-input.left + input.right) * self.stats.speed;
+      self.lastProcessedInput = input.inputSequenceNumber;
     }
   });
   this.inputs = [];

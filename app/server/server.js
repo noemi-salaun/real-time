@@ -25,7 +25,7 @@ app.use('/shared', express.static(global.SHARED_DIR));
 app.use('/bower', express.static(global.BOWER_DIR));
 
 var controller = require('./controller');
-controller.initialize(10, io.sockets);
+controller.initialize(5, io.sockets);
 controller.start();
 
 // Socket routing.

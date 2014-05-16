@@ -3,6 +3,8 @@
 
 (function(window) {
   var Game = function(socket) {
+    this.CLIENT_SIDE_PREDICTION = true;
+    this.SERVER_RECONCILIATION = true;
     this.initialize(socket);
   };
 
@@ -19,6 +21,9 @@
       right: false,
       left: false
     };
+
+    this.pendingInputs = [];
+    this.inputSequenceNumber = 0;
   };
 
   Game.prototype.initCanvas = function() {
@@ -59,17 +64,34 @@
   };
 
   Game.prototype.processServerMessages = function() {
-    while (true) {
-      var message = this.serverMessages.shift();
-      if (!message) {
-        break;
-      }
-
+    var message;
+    while (message = this.serverMessages.shift()) {
       if (this.cube === null) {
         this.cube = new Cube(this.world);
       }
 
       this.cube.stats = message.cube;
+
+      if (this.SERVER_RECONCILIATION) {
+        // Server Reconciliation. Re-apply all the inputs not yet processed by
+        // the server.
+        var i = 0;
+        while (i < this.pendingInputs.length) {
+          var input = this.pendingInputs[i];
+          if (input.inputSequenceNumber <= message.lastProcessedInput) {
+            // Already processed. Its effect is already taken into account
+            // into the world update we just got, so we can drop it.
+            this.pendingInputs.splice(i, 1);
+          } else {
+            // Not processed by the server yet. Re-apply it.
+            this.cube.applyInput(input);
+            i++;
+          }
+        }
+      } else {
+        // Reconciliation is disabled, so drop all the saved inputs.
+        this.pendingInputs = [];
+      }
     }
   };
 
@@ -88,7 +110,15 @@
       left: this.input.left ? interval : 0
     };
 
+    input.inputSequenceNumber = this.inputSequenceNumber++;
     this.socket.emit('input', input);
+
+    if (this.CLIENT_SIDE_PREDICTION) {
+      this.cube.applyInput(input);
+    }
+
+    // Save this input for later reconciliation.
+    this.pendingInputs.push(input);
   };
 
   Game.prototype.renderCanvas = function() {

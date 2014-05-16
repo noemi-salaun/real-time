@@ -12,6 +12,9 @@ Game.prototype.initialize = function(frequency, sockets) {
   this.timestep = (1 / frequency) * 1000;
   this.interval = null;
   this.lastTick = new Date().getTime();
+
+  // Last processed input.
+  this.lastProcessedInput = null;
 };
 
 Game.prototype.start = function() {
@@ -47,7 +50,14 @@ Game.prototype.handleInput = function(input) {
 };
 
 Game.prototype.getWorld = function() {
-  return {cube: this.cube === null ? null : this.cube.stats};
+  if (this.cube === null) {
+    return null;
+  } else {
+    return {
+      cube: this.cube.stats,
+      lastProcessedInput: this.cube.lastProcessedInput
+    };
+  }
 };
 
 module.exports = Game;

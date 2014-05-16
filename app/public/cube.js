@@ -25,5 +25,10 @@
     this.y = this.stats.y;
   };
 
+  Cube.prototype.applyInput = function(input) {
+    this.stats.y += (-input.up + input.down) * this.stats.speed;
+    this.stats.x += (-input.left + input.right) * this.stats.speed;
+  };
+
   window.Cube = Cube;
 }(window));
