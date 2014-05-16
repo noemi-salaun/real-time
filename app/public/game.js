@@ -3,8 +3,6 @@
 
 (function(window) {
   var Game = function(socket) {
-    this.CLIENT_SIDE_PREDICTION = true;
-    this.SERVER_RECONCILIATION = true;
     this.initialize(socket);
   };
 
@@ -72,7 +70,7 @@
 
       this.cube.stats = message.cube;
 
-      if (this.SERVER_RECONCILIATION) {
+      if (window.SERVER_RECONCILIATION) {
         // Server Reconciliation. Re-apply all the inputs not yet processed by
         // the server.
         var i = 0;
@@ -113,7 +111,7 @@
     input.inputSequenceNumber = this.inputSequenceNumber++;
     this.socket.emit('input', input);
 
-    if (this.CLIENT_SIDE_PREDICTION) {
+    if (window.CLIENT_SIDE_PREDICTION) {
       this.cube.applyInput(input);
     }
 

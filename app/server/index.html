@@ -5,13 +5,18 @@
     <title>Real Time</title>
     <meta name="description" content="Home page for Duvo Real Time application.">
     <meta name="viewport" content="width=device-width">
-    
+
     <link rel="stylesheet" href="/public/style.css">
-    
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/bower/easeljs/lib/easeljs-0.7.1.min.js"></script>
   </head>
   <body>
+    <div>
+      <input id="prediction" type="checkbox" onchange="javascript:updateParameters()"> Prediction - 
+      <input id="reconciliation" type="checkbox" onchange="javascript:updateParameters()"> Reconciliation - 
+      <input id="interpolation" type="checkbox" onchange="javascript:updateParameters()"> Interpolation
+    </div>
     <canvas id="mainCanvas" height="500" width="500"></canvas>
 
     <script src="/public/cube.js"></script>
