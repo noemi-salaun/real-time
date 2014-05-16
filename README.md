@@ -21,3 +21,11 @@ Real Time
 ### Install Node modules dependencies
 
     npm install
+    
+### Todos
+
+- ~~Client-side prediction~~
+- ~~Server reconciliation~~
+- Multiplayer
+- Interpolation
+- Lag compensation
