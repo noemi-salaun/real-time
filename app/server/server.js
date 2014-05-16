@@ -24,17 +24,9 @@ app.use('/public', express.static(global.PUBLIC_DIR));
 app.use('/shared', express.static(global.SHARED_DIR));
 app.use('/bower', express.static(global.BOWER_DIR));
 
-var controller = require('./controller');
-controller.initialize(5, io.sockets);
-controller.start();
-
-// Socket routing.
-io.sockets.on('connection', function(socket) {
-  controller.newCube();
-  socket.on('input', function(msg/*, fn*/) {
-    controller.handleInput(msg);
-  });
-});
+var Game = require('./game');
+var game = new Game(5, io.sockets, 500);
+game.start();
 
 // Start listening.
 server.listen(3000, function() {
