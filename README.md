@@ -28,9 +28,9 @@ Real Time
     
 ## Todos
 
-- ~~Client-side prediction~~
-- ~~Server reconciliation~~
-- ~~Separate client~~
-- ~~Multiplayer~~
-- Interpolation
-- Lag compensation
+- [x] ~~Client-side prediction~~
+- [x] ~~Server reconciliation~~
+- [x] ~~Separate client~~
+- [x] ~~Multiplayer~~
+- [ ] Interpolation
+- [ ] Lag compensation
