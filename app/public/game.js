@@ -68,14 +68,10 @@
   Game.prototype.processServerMessages = function() {
     var message;
     while (message = this.serverMessages.shift()) {
-      console.log(this.cubeId);
       for (var id in message) {
         var stats = message[id];
-        console.log('id:' + id);
 
         if (id === this.cubeId) {
-          
-          console.log('MEEEEEE');
           // Me.
           if (this.cube === null) {
             this.cube = new Cube(this.world);
@@ -88,7 +84,7 @@
             var i = 0;
             while (i < this.pendingInputs.length) {
               var input = this.pendingInputs[i];
-              if (input.inputSequenceNumber <= stats.lastProcessedInput) {
+              if (input.meta.inputSequenceNumber <= stats.lastProcessedInput) {
                 // Already processed. Its effect is already taken into account
                 // into the world update we just got, so we can drop it.
                 this.pendingInputs.splice(i, 1);
@@ -123,13 +119,16 @@
 
     // Package player's input.
     var input = {
+      meta: {
+        interval: interval,
+        inputSequenceNumber: this.inputSequenceNumber++
+      },
       up: this.input.up ? interval : 0,
       right: this.input.right ? interval : 0,
       down: this.input.down ? interval : 0,
       left: this.input.left ? interval : 0
     };
 
-    input.inputSequenceNumber = this.inputSequenceNumber++;
     this.socket.emit('input', input);
 
     if (window.CLIENT_SIDE_PREDICTION) {

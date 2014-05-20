@@ -33,7 +33,7 @@ Game.prototype.stop = function() {
 Game.prototype.tick = function() {
   var now = new Date().getTime();
   var last = this.lastTick || now;
-  this.interval = (now - last) / 1000.0;
+  this.tickInterval = (now - last) / 1000.0;
   this.lastTick = now;
 
   this.processInputs();
@@ -50,7 +50,7 @@ Game.prototype.initSockets = function(sockets) {
       self.cubes[socketId] = new Cube();
 
       socket.on('input', function(data) {
-        data.id = socketId;
+        data.meta.id = socketId;
         self.handleInput(data);
       });
 
@@ -60,8 +60,16 @@ Game.prototype.initSockets = function(sockets) {
 
 };
 
-Game.prototype.validateInput = function(/* input */) {
-  // this.interval
+Game.prototype.validateInput = function(input) {
+  // Check if all inputs time is under the input interval.
+  for (var key in input) {
+    if (key !== 'meta') {
+      if (input[key] > input.meta.interval) {
+        return false;
+      }
+    }
+  }
+
   return true;
 };
 
@@ -86,8 +94,10 @@ Game.prototype.processInputs = function() {
     // We just ignore inputs that don't look valid; this is what prevents
     // clients from cheating.
     if (this.validateInput(message)) {
-      this.cubes[message.id].applyInput(message);
-      this.lastProcessedInput[message.id] = message.inputSequenceNumber;
+      this.cubes[message.meta.id].applyInput(message);
+      this.lastProcessedInput[message.meta.id] = message.meta.inputSequenceNumber;
+    } else {
+      console.log('CHEEEEEEEEEEEEEEEEEEEEEEEAAAAAAAAAAAAAAAAAT !!!!!!!!!!!!!!');
     }
   }
 };
