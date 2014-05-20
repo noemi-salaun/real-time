@@ -33,7 +33,7 @@ Game.prototype.stop = function() {
 Game.prototype.tick = function() {
   var now = new Date().getTime();
   var last = this.lastTick || now;
-  this.tickInterval = (now - last) / 1000.0;
+  this.tickInterval = now - last;
   this.lastTick = now;
 
   this.processInputs();
@@ -111,7 +111,8 @@ Game.prototype.getWorld = function() {
   for (var id in this.cubes) {
     var cube = this.cubes[id];
     result[id] = {
-      cube: cube.stats,
+      interval: this.tickInterval,
+      cube: cube.states,
       lastProcessedInput: this.lastProcessedInput[id]
     };
   }

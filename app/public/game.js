@@ -69,14 +69,14 @@
     var message;
     while (message = this.serverMessages.shift()) {
       for (var id in message) {
-        var stats = message[id];
+        var states = message[id];
 
         if (id === this.cubeId) {
           // Me.
           if (this.cube === null) {
             this.cube = new Cube(this.world);
           }
-          this.cube.stats = stats.cube;
+          this.cube.states = states.cube;
 
           if (window.SERVER_RECONCILIATION) {
             // Server Reconciliation. Re-apply all the inputs not yet processed by
@@ -84,7 +84,7 @@
             var i = 0;
             while (i < this.pendingInputs.length) {
               var input = this.pendingInputs[i];
-              if (input.meta.inputSequenceNumber <= stats.lastProcessedInput) {
+              if (input.meta.inputSequenceNumber <= states.lastProcessedInput) {
                 // Already processed. Its effect is already taken into account
                 // into the world update we just got, so we can drop it.
                 this.pendingInputs.splice(i, 1);
@@ -102,8 +102,13 @@
           // The others.
           if (!(id in this.others)) {
             this.others[id] = new Cube(this.world);
+            this.others[id].states = states.cube;
           }
-          this.others[id].stats = stats.cube;
+          if (window.ENTITY_INTERPOLATION) {
+            this.others[id].interpolate(states.cube, states.interval);
+          } else {
+            this.others[id].states = states.cube;
+          }          
         }
       }
 

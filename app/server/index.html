@@ -10,12 +10,13 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/bower/easeljs/lib/easeljs-0.7.1.min.js"></script>
+    <script src="/bower/createjs-tweenjs/lib/tweenjs-0.5.1.min.js"></script>
   </head>
   <body>
     <div>
       <input id="prediction" type="checkbox" onchange="javascript:updateParameters()"> <label for="prediction">Prediction</label> - 
       <input id="reconciliation" type="checkbox" onchange="javascript:updateParameters()"> <label for="reconciliation">Reconciliation</label> - 
-      <input id="interpolation" type="checkbox" onchange="javascript:updateParameters()" disabled="disabled"> <label for="interpolation">Interpolation</label>
+      <input id="interpolation" type="checkbox" onchange="javascript:updateParameters()"> <label for="interpolation">Interpolation</label>
     </div>
     <canvas id="mainCanvas" height="500" width="500"></canvas>
 

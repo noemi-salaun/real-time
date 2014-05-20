@@ -5,7 +5,7 @@ function Cube() {
 }
 
 Cube.prototype.initialize = function() {
-  this.stats = {
+  this.states = {
     x: 200,
     y: 100,
     speed: 100
@@ -13,8 +13,8 @@ Cube.prototype.initialize = function() {
 };
 
 Cube.prototype.applyInput = function(input) {
-  this.stats.y += (-input.up + input.down) * this.stats.speed;
-  this.stats.x += (-input.left + input.right) * this.stats.speed;
+  this.states.y += (-input.up + input.down) * this.states.speed;
+  this.states.x += (-input.left + input.right) * this.states.speed;
 };
 
 module.exports = Cube;

@@ -15,7 +15,7 @@
   Cube.prototype.initialize = function(world) {
     this.Shape_initialize();
 
-    this.stats = null;
+    this.states = null;
     var random = Math.floor(Math.random() * (colors.length - 1));
     this.graphics.beginFill(colors[random]).drawRect(-20, -20, 40, 40);
     this.setBounds(-20, -20, 40, 40);
@@ -23,13 +23,18 @@
   };
 
   Cube.prototype.renderCanvas = function() {
-    this.x = this.stats.x;
-    this.y = this.stats.y;
+    this.x = this.states.x;
+    this.y = this.states.y;
   };
 
   Cube.prototype.applyInput = function(input) {
-    this.stats.y += (-input.up + input.down) * this.stats.speed;
-    this.stats.x += (-input.left + input.right) * this.stats.speed;
+    this.states.y += (-input.up + input.down) * this.states.speed;
+    this.states.x += (-input.left + input.right) * this.states.speed;
+  };
+
+  Cube.prototype.interpolate = function(states, time) {
+    createjs.Tween.removeTweens(this);
+    createjs.Tween.get(this.states).to({x: states.x, y: states.y}, time, createjs.Ease.linear);
   };
 
   window.Cube = Cube;
