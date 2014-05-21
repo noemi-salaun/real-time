@@ -1,5 +1,5 @@
 'use strict';
-/* global createjs */
+/* global createjs, cubeShare */
 
 (function(window) {
   var colors = ['red', 'blue', 'green', 'grey'];
@@ -28,38 +28,21 @@
   };
 
   Cube.prototype.renderCanvas = function() {
+    this.scaleX = this.states.scale;
+    this.scaleY = this.states.scale;
     this.x = this.states.x;
     this.y = this.states.y;
   };
 
   Cube.prototype.applyInput = function(input) {
-    var self = this;
-    if (this.states.teleport) {
-      // Nothing else during teleportation.
-    } else {
-      if (input.teleport) {
-        this.states.teleport = true;
-        setTimeout(function() {
-          // Enter teleportation.
-          setTimeout(function() {
-            // Teleportation.
-            self.states.y -= 100;
-            setTimeout(function() {
-              // Leave teleportation.
-              self.states.teleport = false;
-            }, self.teleport.leave);
-          }, self.teleport.travel);
-        }, self.teleport.enter);
-      } else {
-        this.states.y += (-input.up + input.down) * this.states.speed * input.meta.interval / 1000;
-        this.states.x += (-input.left + input.right) * this.states.speed * input.meta.interval / 1000;
-      }
-    }
+    cubeShare.applyInput(this, input);
   };
 
   Cube.prototype.interpolate = function(states, time) {
     createjs.Tween.removeTweens(this);
-    createjs.Tween.get(this.states).to({x: states.x, y: states.y}, time, createjs.Ease.linear);
+    var threshold = time / 250;
+    var scale = states.scale < threshold ? 0 : states.scale;
+    createjs.Tween.get(this.states).to({x: states.x, y: states.y, scale: scale}, time, createjs.Ease.linear);
   };
 
   window.Cube = Cube;
