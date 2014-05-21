@@ -1,12 +1,15 @@
 'use strict';
 /* global createjs, Cube */
 
+var i = 0;
+
 (function(window) {
   var Game = function(socket) {
     this.initialize(socket);
   };
 
   Game.prototype.initialize = function(socket) {
+    this.id = i++;
     this.initCanvas();
     this.initSocket(socket);
 
@@ -18,12 +21,15 @@
       up: false,
       down: false,
       right: false,
-      left: false
+      left: false,
+      teleport: false
     };
 
     this.pendingInputs = [];
     this.inputSequenceNumber = 0;
   };
+
+  var handleTick;
 
   Game.prototype.initCanvas = function() {
     var self = this;
@@ -33,9 +39,15 @@
     this.stage.addChild(this.world);
 
     createjs.Ticker.setFPS(60);
-    createjs.Ticker.addEventListener('tick', function() {
+
+    handleTick = function() {
       self.tick();
-    });
+    };
+    createjs.Ticker.addEventListener('tick', handleTick);
+  };
+
+  Game.prototype.stop = function() {
+    createjs.Ticker.removeEventListener('tick', handleTick);
   };
 
   Game.prototype.initSocket = function(socket) {
@@ -108,7 +120,7 @@
             this.others[id].interpolate(states.cube, states.interval);
           } else {
             this.others[id].states = states.cube;
-          }          
+          }
         }
       }
 
@@ -119,22 +131,24 @@
     // Compute interval since last update.
     var now = new Date().getTime();
     var last = this.last || now;
-    var interval = (now - last) / 1000.0;
+    var interval = now - last;
     this.last = now;
 
     // Package player's input.
     var input = {
       meta: {
-        interval: interval,
         inputSequenceNumber: this.inputSequenceNumber++
       },
-      up: this.input.up ? interval : 0,
-      right: this.input.right ? interval : 0,
-      down: this.input.down ? interval : 0,
-      left: this.input.left ? interval : 0
+      up: this.input.up ? 1 : 0,
+      right: this.input.right ? 1 : 0,
+      down: this.input.down ? 1 : 0,
+      left: this.input.left ? 1 : 0,
+      teleport: this.input.teleport ? 1 : 0
     };
 
     this.socket.emit('input', input);
+
+    input.meta.interval = interval;
 
     if (window.CLIENT_SIDE_PREDICTION) {
       this.cube.applyInput(input);

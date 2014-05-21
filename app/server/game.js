@@ -43,6 +43,7 @@ Game.prototype.tick = function() {
 Game.prototype.initSockets = function(sockets) {
   this.sockets = sockets;
   this.serverMessages = [];
+  this.lastInput = [];
   var self = this;
   this.sockets.on('connection', function(socket) {
     socket.on('new', function(data, callback) {
@@ -50,7 +51,13 @@ Game.prototype.initSockets = function(sockets) {
       self.cubes[socketId] = new Cube();
 
       socket.on('input', function(data) {
+        var now = new Date().getTime();
+        var last = self.lastInput[socketId] || now;
+        var interval = now - last;
+        self.lastInput[socketId] = now;        
+
         data.meta.id = socketId;
+        data.meta.interval = interval;
         self.handleInput(data);
       });
 
@@ -58,19 +65,6 @@ Game.prototype.initSockets = function(sockets) {
     });
   });
 
-};
-
-Game.prototype.validateInput = function(input) {
-  // Check if all inputs time is under the input interval.
-  for (var key in input) {
-    if (key !== 'meta') {
-      if (input[key] > input.meta.interval) {
-        return false;
-      }
-    }
-  }
-
-  return true;
 };
 
 Game.prototype.handleInput = function(input) {
@@ -89,16 +83,8 @@ Game.prototype.processInputs = function() {
   // Process all pending messages from clients.
   var message;
   while (message = this.serverMessages.shift()) {
-
-    // Update the state of the entity, based on its input.
-    // We just ignore inputs that don't look valid; this is what prevents
-    // clients from cheating.
-    if (this.validateInput(message)) {
-      this.cubes[message.meta.id].applyInput(message);
-      this.lastProcessedInput[message.meta.id] = message.meta.inputSequenceNumber;
-    } else {
-      console.log('CHEEEEEEEEEEEEEEEEEEEEEEEAAAAAAAAAAAAAAAAAT !!!!!!!!!!!!!!');
-    }
+    this.cubes[message.meta.id].applyInput(message);
+    this.lastProcessedInput[message.meta.id] = message.meta.inputSequenceNumber;
   }
 };
 

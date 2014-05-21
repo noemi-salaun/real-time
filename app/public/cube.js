@@ -6,6 +6,11 @@
 
   var Cube = function(world) {
     this.initialize(world);
+    this.teleport = {
+      enter: 200,
+      travel: 100,
+      leave: 200
+    };
   };
 
   Cube.prototype = new createjs.Shape();
@@ -28,8 +33,28 @@
   };
 
   Cube.prototype.applyInput = function(input) {
-    this.states.y += (-input.up + input.down) * this.states.speed;
-    this.states.x += (-input.left + input.right) * this.states.speed;
+    var self = this;
+    if (this.states.teleport) {
+      // Nothing else during teleportation.
+    } else {
+      if (input.teleport) {
+        this.states.teleport = true;
+        setTimeout(function() {
+          // Enter teleportation.
+          setTimeout(function() {
+            // Teleportation.
+            self.states.y -= 100;
+            setTimeout(function() {
+              // Leave teleportation.
+              self.states.teleport = false;
+            }, self.teleport.leave);
+          }, self.teleport.travel);
+        }, self.teleport.enter);
+      } else {
+        this.states.y += (-input.up + input.down) * this.states.speed * input.meta.interval / 1000;
+        this.states.x += (-input.left + input.right) * this.states.speed * input.meta.interval / 1000;
+      }
+    }
   };
 
   Cube.prototype.interpolate = function(states, time) {
