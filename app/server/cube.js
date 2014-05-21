@@ -1,6 +1,6 @@
 'use strict';
 
-var cubeShare = require('../shared/cube');
+var cubeShare = require(global.SHARED_DIR + '/cube');
 
 function Cube() {
   this.initialize();

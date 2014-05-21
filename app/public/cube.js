@@ -40,7 +40,7 @@
 
   Cube.prototype.interpolate = function(states, time) {
     createjs.Tween.removeTweens(this);
-    var threshold = time / 250;
+    var threshold = time / 200;
     var scale = states.scale < threshold ? 0 : states.scale;
     createjs.Tween.get(this.states).to({x: states.x, y: states.y, scale: scale}, time, createjs.Ease.linear);
   };
