@@ -32,6 +32,6 @@ Real Time
 - [x] ~~Server reconciliation~~
 - [x] ~~Separate client~~
 - [x] ~~Multiplayer~~
-- [x] Interpolation
+- [x] ~~Interpolation~~
 - [ ] Collision
 - [ ] Lag compensation
