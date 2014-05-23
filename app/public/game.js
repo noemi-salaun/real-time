@@ -79,6 +79,7 @@ var i = 0;
 
   Game.prototype.processServerMessages = function() {
     var message;
+    var lastProcessedInput = null;
     while (message = this.serverMessages.shift()) {
       for (var id in message) {
         var states = message[id];
@@ -89,27 +90,7 @@ var i = 0;
             this.cube = new Cube(this.world);
           }
           this.cube.states = states.cube;
-
-          if (window.SERVER_RECONCILIATION) {
-            // Server Reconciliation. Re-apply all the inputs not yet processed by
-            // the server.
-            var i = 0;
-            while (i < this.pendingInputs.length) {
-              var input = this.pendingInputs[i];
-              if (input.meta.inputSequenceNumber <= states.lastProcessedInput) {
-                // Already processed. Its effect is already taken into account
-                // into the world update we just got, so we can drop it.
-                this.pendingInputs.splice(i, 1);
-              } else {
-                // Not processed by the server yet. Re-apply it.
-                this.cube.applyInput(input, this.others);
-                i++;
-              }
-            }
-          } else {
-            // Reconciliation is disabled, so drop all the saved inputs.
-            this.pendingInputs = [];
-          }
+          lastProcessedInput = states.lastProcessedInput;
         } else {
           // The others.
           if (!(id in this.others)) {
@@ -123,7 +104,29 @@ var i = 0;
           }
         }
       }
+    }
 
+    if (window.SERVER_RECONCILIATION) {
+      if (lastProcessedInput !== null) {
+        // Server Reconciliation. Re-apply all the inputs not yet processed by
+        // the server.
+        var i = 0;
+        while (i < this.pendingInputs.length) {
+          var input = this.pendingInputs[i];
+          if (input.meta.inputSequenceNumber <= lastProcessedInput) {
+            // Already processed. Its effect is already taken into account
+            // into the world update we just got, so we can drop it.
+            this.pendingInputs.splice(i, 1);
+          } else {
+            // Not processed by the server yet. Re-apply it.
+            this.cube.applyInput(input, this.others);
+            i++;
+          }
+        }
+      }
+    } else {
+      // Reconciliation is disabled, so drop all the saved inputs.
+      this.pendingInputs = [];
     }
   };
 
@@ -159,11 +162,13 @@ var i = 0;
   };
 
   Game.prototype.renderCanvas = function() {
+    this.cube.renderCanvas();
+
     for (var id in this.others) {
       var other = this.others[id];
       other.renderCanvas();
     }
-    this.cube.renderCanvas();
+
     this.stage.update();
   };
 

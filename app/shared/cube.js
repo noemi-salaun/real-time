@@ -75,7 +75,10 @@
             var intersectionBefore = shared.utils.calculateIntersection(sBounds, cBounds);
             var intersectionAfter = shared.utils.calculateIntersection(sBounds, cBounds, x, y);
             if (intersectionAfter !== null && intersectionAfter.collision) {
-              if (intersectionBefore !== null) {
+              if (intersectionBefore !== null && !intersectionBefore.collision) {
+                if (intersectionBefore.height > 0 && intersectionBefore.width > 0) {
+                  console.log('PROBLEME');
+                }
                 if (intersectionBefore.height > 0) {
                   // Horizontal alignement.
                   x -= x < 0 ? -intersectionAfter.width : intersectionAfter.width;
