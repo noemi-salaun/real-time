@@ -74,16 +74,13 @@
             var cBounds = shared.cube.getBounds(cube);
             var intersectionBefore = shared.utils.calculateIntersection(sBounds, cBounds);
             var intersectionAfter = shared.utils.calculateIntersection(sBounds, cBounds, x, y);
-            console.log(intersectionBefore);
             if (intersectionAfter !== null && intersectionAfter.collision) {
               if (intersectionBefore !== null) {
                 if (intersectionBefore.height > 0) {
                   // Horizontal alignement.
-                  console.log('h');
                   x -= x < 0 ? -intersectionAfter.width : intersectionAfter.width;
                 } else {
                   // Vertical alignement.
-                  console.log('v');
                   y -= y < 0 ? -intersectionAfter.height : intersectionAfter.height;
                 }
               } else {

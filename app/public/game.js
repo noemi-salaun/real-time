@@ -102,7 +102,7 @@ var i = 0;
                 this.pendingInputs.splice(i, 1);
               } else {
                 // Not processed by the server yet. Re-apply it.
-                this.cube.applyInput(input);
+                this.cube.applyInput(input, this.others);
                 i++;
               }
             }
