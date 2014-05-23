@@ -35,7 +35,7 @@ Real Time
 - [x] ~~Interpolation~~
 - [ ] Collision
   - [x] ~~Server side~~
-  - [x] ~~Prediciton~~
+  - [x] ~~Prediction~~
   - [ ] Reconciliation
   - [ ] Bugs
     - [ ] Dodge from bot to top
