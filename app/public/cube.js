@@ -2,8 +2,7 @@
 /* global createjs, cubeShare */
 
 (function(window) {
-  var colors = ['red', 'blue', 'green', 'grey'];
-
+  
   var Cube = function(world) {
     this.initialize(world);
     this.teleport = {
@@ -21,13 +20,17 @@
     this.Shape_initialize();
 
     this.states = null;
-    var random = Math.floor(Math.random() * (colors.length - 1));
-    this.graphics.beginFill(colors[random]).drawRect(-20, -20, 40, 40);
+    this.filled = false;
+    
     this.setBounds(-20, -20, 40, 40);
     world.addChild(this);
   };
 
   Cube.prototype.renderCanvas = function() {
+    if (!this.filled) {
+      this.graphics.beginFill(this.states.color).drawRect(-20, -20, 40, 40);
+      this.filled = true;
+    }
     this.scaleX = this.states.scale;
     this.scaleY = this.states.scale;
     this.x = this.states.x;
