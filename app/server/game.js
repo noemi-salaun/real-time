@@ -83,7 +83,7 @@ Game.prototype.processInputs = function() {
   // Process all pending messages from clients.
   var message;
   while (message = this.serverMessages.shift()) {
-    this.cubes[message.meta.id].applyInput(message);
+    this.cubes[message.meta.id].applyInput(message, this.cubes);
     this.lastProcessedInput[message.meta.id] = message.meta.inputSequenceNumber;
   }
 };

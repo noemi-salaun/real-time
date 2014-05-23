@@ -1,8 +1,8 @@
 'use strict';
-/* global createjs, cubeShare */
+/* global createjs, cubeShare, utilsShare */
 
 (function(window) {
-  
+
   var Cube = function(world) {
     this.initialize(world);
     this.teleport = {
@@ -21,7 +21,7 @@
 
     this.states = null;
     this.filled = false;
-    
+
     this.setBounds(-20, -20, 40, 40);
     world.addChild(this);
   };
@@ -37,8 +37,12 @@
     this.y = this.states.y;
   };
 
-  Cube.prototype.applyInput = function(input) {
-    cubeShare.applyInput(this, input);
+  Cube.prototype.applyInput = function(input, world) {
+    var shared = {
+      cube: cubeShare,
+      utils: utilsShare
+    };
+    cubeShare.applyInput(this, input, world, shared);
   };
 
   Cube.prototype.interpolate = function(states, time) {

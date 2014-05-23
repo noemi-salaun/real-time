@@ -1,6 +1,7 @@
 'use strict';
 
 var cubeShare = require(global.SHARED_DIR + '/cube');
+var utilsShare = require(global.SHARED_DIR + '/utils');
 
 var colors = ['red', 'blue', 'green', 'grey'];
 
@@ -28,8 +29,12 @@ Cube.prototype.initialize = function() {
   };
 };
 
-Cube.prototype.applyInput = function(input) {
-  cubeShare.applyInput(this, input);
+Cube.prototype.applyInput = function(input, world) {
+  var shared = {
+    cube: cubeShare,
+    utils: utilsShare
+  };
+  cubeShare.applyInput(this, input, world, shared);
 };
 
 module.exports = Cube;

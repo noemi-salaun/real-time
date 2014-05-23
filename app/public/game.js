@@ -151,7 +151,7 @@ var i = 0;
     input.meta.interval = interval;
 
     if (window.CLIENT_SIDE_PREDICTION) {
-      this.cube.applyInput(input);
+      this.cube.applyInput(input, this.others);
     }
 
     // Save this input for later reconciliation.

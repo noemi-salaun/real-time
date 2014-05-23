@@ -1,6 +1,11 @@
 (function(exports) {
 
-  exports.applyInput = function(self, input) {
+  exports.getBounds = function(self) {
+    var bounds = {x: self.states.x, y: self.states.y, width: 40, height: 40};
+    return bounds;
+  };
+
+  exports.applyInput = function(self, input, world, shared) {
     var interval = input.meta.interval;
 
     if (!self.states.teleport.inProgress) {
@@ -59,8 +64,40 @@
 
     // Use the remaining time yo move.
     if (interval > 0) {
-      self.states.y += (-input.up + input.down) * self.states.speed * interval / 1000;
-      self.states.x += (-input.left + input.right) * self.states.speed * interval / 1000;
+      var y = (-input.up + input.down) * self.states.speed * interval / 1000;
+      var x = (-input.left + input.right) * self.states.speed * interval / 1000;
+      if (x !== 0 || y !== 0) {
+        for (var i in world) {
+          var cube = world[i];
+          if (cube !== self) {
+            var sBounds = shared.cube.getBounds(self);
+            var cBounds = shared.cube.getBounds(cube);
+            var intersectionBefore = shared.utils.calculateIntersection(sBounds, cBounds);
+            var intersectionAfter = shared.utils.calculateIntersection(sBounds, cBounds, x, y);
+            console.log(intersectionBefore);
+            if (intersectionAfter !== null && intersectionAfter.collision) {
+              if (intersectionBefore !== null) {
+                if (intersectionBefore.height > 0) {
+                  // Horizontal alignement.
+                  console.log('h');
+                  x -= x < 0 ? -intersectionAfter.width : intersectionAfter.width;
+                } else {
+                  // Vertical alignement.
+                  console.log('v');
+                  y -= y < 0 ? -intersectionAfter.height : intersectionAfter.height;
+                }
+              } else {
+                x -= x < 0 ? -intersectionAfter.width : intersectionAfter.width;
+                y -= y < 0 ? -intersectionAfter.height : intersectionAfter.height;
+              }
+            }
+
+          }
+        }
+        self.states.y += y;
+        self.states.x += x;
+      }
+
     }
 
   };
