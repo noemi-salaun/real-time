@@ -54,16 +54,17 @@
   };
 
   Cube.prototype.interpolate = function(states, time) {
+    var self = this;
     createjs.Tween.removeTweens(this);
     var threshold = Math.min(1, time / 200);
     var scale = states.scale < threshold ? 0 : states.scale;
     this.interpolation = this.states;
     this.states = states;
-    
+
     var callback = function() {
-      this.interpolation = null;
+      self.interpolation = null;
     };
-    
+
     if (scale < 1) {
       createjs.Tween.get(this.interpolation).to({scale: scale}, time, createjs.Ease.linear).call(callback);
     } else {
