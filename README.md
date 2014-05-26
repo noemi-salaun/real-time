@@ -38,7 +38,8 @@ Real Time
   - [x] ~~Prediction~~
   - [ ] Reconciliation
   - [ ] Bugs
-    - [ ] Dodge from bot to top
-    - [ ] Flickering with reconciliation
+    - [x] Dodge from bot to top
+    - [x] Flickering with reconciliation
+    - [ ] Small jump with reconciliation
 - [ ] Fire !!!
 - [ ] Lag compensation

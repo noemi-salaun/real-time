@@ -10,7 +10,7 @@ var keyBind = {
   38: 'up',
   39: 'right',
   40: 'down',
-  32: 'teleport'
+  //32: 'teleport'
 };
 var keyHandler = function(e) {
   e = e || window.event;

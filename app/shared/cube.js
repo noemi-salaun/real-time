@@ -74,15 +74,23 @@
             var cBounds = shared.cube.getBounds(cube);
             var intersectionBefore = shared.utils.calculateIntersection(sBounds, cBounds);
             var intersectionAfter = shared.utils.calculateIntersection(sBounds, cBounds, x, y);
+            if (intersectionBefore !== null) {
+              console.log('b');
+              if (intersectionBefore.height > 0.1) {
+                console.log('h', intersectionBefore.height);
+              }
+              if (intersectionBefore.width > 0.1) {
+                console.log('w', intersectionBefore.width);
+              }
+            }
+
             if (intersectionAfter !== null && intersectionAfter.collision) {
-              if (intersectionBefore !== null && !intersectionBefore.collision) {
-                if (intersectionBefore.height > 0 && intersectionBefore.width > 0) {
-                  console.log('PROBLEME');
-                }
-                if (intersectionBefore.height > 0) {
+              if (intersectionBefore !== null) {
+                if (intersectionBefore.height > 0.1) {
                   // Horizontal alignement.
                   x -= x < 0 ? -intersectionAfter.width : intersectionAfter.width;
-                } else {
+                }
+                if (intersectionBefore.width > 0.1) {
                   // Vertical alignement.
                   y -= y < 0 ? -intersectionAfter.height : intersectionAfter.height;
                 }

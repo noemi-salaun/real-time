@@ -25,7 +25,7 @@ app.use('/shared', express.static(global.SHARED_DIR));
 app.use('/bower', express.static(global.BOWER_DIR));
 
 var Game = require('./game');
-var game = new Game(20, io.sockets);
+var game = new Game(10, io.sockets, 200);
 game.start();
 
 // Start listening.

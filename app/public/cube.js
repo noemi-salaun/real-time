@@ -21,6 +21,7 @@
 
     this.states = null;
     this.filled = false;
+    this.interpolation = null;
 
     this.setBounds(-20, -20, 40, 40);
     world.addChild(this);
@@ -31,10 +32,17 @@
       this.graphics.beginFill(this.states.color).drawRect(-20, -20, 40, 40);
       this.filled = true;
     }
-    this.scaleX = this.states.scale;
-    this.scaleY = this.states.scale;
-    this.x = this.states.x;
-    this.y = this.states.y;
+    if (this.interpolation !== null) {
+      this.scaleX = this.interpolation.scale;
+      this.scaleY = this.interpolation.scale;
+      this.x = this.interpolation.x;
+      this.y = this.interpolation.y;
+    } else {
+      this.scaleX = this.states.scale;
+      this.scaleY = this.states.scale;
+      this.x = this.states.x;
+      this.y = this.states.y;
+    }
   };
 
   Cube.prototype.applyInput = function(input, world) {
@@ -49,14 +57,17 @@
     createjs.Tween.removeTweens(this);
     var threshold = Math.min(1, time / 200);
     var scale = states.scale < threshold ? 0 : states.scale;
+    this.interpolation = this.states;
+    this.states = states;
+    
+    var callback = function() {
+      this.interpolation = null;
+    };
+    
     if (scale < 1) {
-      createjs.Tween.get(this.states).to({scale: scale}, time, createjs.Ease.linear);
-      if (states.teleport.moved) {
-        this.states.x = states.x;
-        this.states.y = states.y;
-      }
+      createjs.Tween.get(this.interpolation).to({scale: scale}, time, createjs.Ease.linear).call(callback);
     } else {
-      createjs.Tween.get(this.states).to({x: states.x, y: states.y, scale: scale}, time, createjs.Ease.linear);
+      createjs.Tween.get(this.interpolation).to({x: states.x, y: states.y, scale: scale}, time, createjs.Ease.linear).call(callback);
     }
 
   };
