@@ -90,14 +90,11 @@ var i = 0;
             this.cube = new Cube(this.world);
           }
           this.cube.states = states.cube;
-          this.cube.resetDisplay();
           lastProcessedInput = states.lastProcessedInput;
         } else {
           // The others.
           if (!(id in this.others)) {
             this.others[id] = new Cube(this.world);
-            this.others[id].states = states.cube;
-            this.others[id].resetDisplay();
           }
           if (window.ENTITY_INTERPOLATION) {
             this.others[id].states = states.cube;
@@ -110,27 +107,30 @@ var i = 0;
       }
     }
 
-    if (window.SERVER_RECONCILIATION) {
-      if (lastProcessedInput !== null) {
-        // Server Reconciliation. Re-apply all the inputs not yet processed by
-        // the server.
-        var i = 0;
-        while (i < this.pendingInputs.length) {
-          var input = this.pendingInputs[i];
-          if (input.meta.inputSequenceNumber <= lastProcessedInput) {
-            // Already processed. Its effect is already taken into account
-            // into the world update we just got, so we can drop it.
-            this.pendingInputs.splice(i, 1);
-          } else {
-            // Not processed by the server yet. Re-apply it.
-            this.cube.applyInput(input, this.others);
-            i++;
+    if (this.cube !== null) {
+      if (window.SERVER_RECONCILIATION) {
+        if (lastProcessedInput !== null) {
+          // Server Reconciliation. Re-apply all the inputs not yet processed by
+          // the server.
+          var i = 0;
+          while (i < this.pendingInputs.length) {
+            var input = this.pendingInputs[i];
+            if (input.meta.inputSequenceNumber <= lastProcessedInput) {
+              // Already processed. Its effect is already taken into account
+              // into the world update we just got, so we can drop it.
+              this.pendingInputs.splice(i, 1);
+            } else {
+              // Not processed by the server yet. Re-apply it.
+              this.cube.applyInput(input, this.others);
+              i++;
+            }
           }
         }
+      } else {
+        this.cube.resetDisplay();
+        // Reconciliation is disabled, so drop all the saved inputs.
+        this.pendingInputs = [];
       }
-    } else {
-      // Reconciliation is disabled, so drop all the saved inputs.
-      this.pendingInputs = [];
     }
   };
 
