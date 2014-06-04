@@ -11,11 +11,6 @@ function Cube() {
 
 Cube.prototype.initialize = function() {
   var random = Math.floor(Math.random() * (colors.length - 1));
-  this.teleport = {
-    enter: 200,
-    travel: 100,
-    leave: 200
-  };
   this.states = {
     color: colors[random],
     x: 200,
@@ -26,6 +21,16 @@ Cube.prototype.initialize = function() {
       ready: true,
       inProgress: false
     }
+  };
+  this.resetDisplay();
+};
+
+Cube.prototype.resetDisplay = function() {
+  var self = this;
+  this.display = {
+    x: self.states.x,
+    y: self.states.y,
+    scale: self.states.scale
   };
 };
 

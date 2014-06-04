@@ -90,17 +90,21 @@ var i = 0;
             this.cube = new Cube(this.world);
           }
           this.cube.states = states.cube;
+          this.cube.resetDisplay();
           lastProcessedInput = states.lastProcessedInput;
         } else {
           // The others.
           if (!(id in this.others)) {
             this.others[id] = new Cube(this.world);
             this.others[id].states = states.cube;
+            this.others[id].resetDisplay();
           }
           if (window.ENTITY_INTERPOLATION) {
-            this.others[id].interpolate(states.cube, states.interval);
+            this.others[id].states = states.cube;
+            this.others[id].interpolate(states.interval);
           } else {
             this.others[id].states = states.cube;
+            this.others[id].resetDisplay();
           }
         }
       }

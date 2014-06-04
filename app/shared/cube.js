@@ -1,4 +1,10 @@
 (function(exports) {
+  
+  var teleport = {
+    enter: 200,
+    travel: 100,
+    leave: 200
+  };
 
   exports.getBounds = function(self) {
     var bounds = {x: self.states.x, y: self.states.y, width: 40, height: 40};
@@ -35,29 +41,29 @@
     if (self.states.teleport.inProgress) {
       var tempInterval;
       // Consume interval time to advance the teleportation.
-      if (interval > 0 && self.states.teleport.enter < self.teleport.enter) {
-        tempInterval = Math.min(interval, self.teleport.enter - self.states.teleport.enter);
+      if (interval > 0 && self.states.teleport.enter < teleport.enter) {
+        tempInterval = Math.min(interval, teleport.enter - self.states.teleport.enter);
         self.states.teleport.enter += tempInterval;
-        self.states.scale = 1 - (self.states.teleport.enter / self.teleport.enter);
+        self.states.scale = 1 - (self.states.teleport.enter / teleport.enter);
         interval -= tempInterval;
       }
-      if (interval > 0 && self.states.teleport.enter === self.teleport.enter && self.states.teleport.travel < self.teleport.travel) {
-        tempInterval = Math.min(interval, self.teleport.travel - self.states.teleport.travel);
+      if (interval > 0 && self.states.teleport.enter === teleport.enter && self.states.teleport.travel < teleport.travel) {
+        tempInterval = Math.min(interval, teleport.travel - self.states.teleport.travel);
         self.states.teleport.travel += tempInterval;
         interval -= tempInterval;
       }
-      if (self.states.teleport.travel === self.teleport.travel && !self.states.teleport.moved) {
+      if (self.states.teleport.travel === teleport.travel && !self.states.teleport.moved) {
         self.states.x += self.states.teleport.x * 100;
         self.states.y += self.states.teleport.y * 100;
         self.states.teleport.moved = true;
       }
-      if (interval > 0 && self.states.teleport.travel === self.teleport.travel && self.states.teleport.leave < self.teleport.leave) {
-        tempInterval = Math.min(interval, self.teleport.leave - self.states.teleport.leave);
+      if (interval > 0 && self.states.teleport.travel === teleport.travel && self.states.teleport.leave < teleport.leave) {
+        tempInterval = Math.min(interval, teleport.leave - self.states.teleport.leave);
         self.states.teleport.leave += tempInterval;
-        self.states.scale = self.states.teleport.leave / self.teleport.leave;
+        self.states.scale = self.states.teleport.leave / teleport.leave;
         interval -= tempInterval;
       }
-      if (self.states.teleport.leave >= self.teleport.leave) {
+      if (self.states.teleport.leave >= teleport.leave) {
         self.states.teleport.inProgress = false;
       }
     }
@@ -74,15 +80,6 @@
             var cBounds = shared.cube.getBounds(cube);
             var intersectionBefore = shared.utils.calculateIntersection(sBounds, cBounds);
             var intersectionAfter = shared.utils.calculateIntersection(sBounds, cBounds, x, y);
-            if (intersectionBefore !== null) {
-              console.log('b');
-              if (intersectionBefore.height > 0.1) {
-                console.log('h', intersectionBefore.height);
-              }
-              if (intersectionBefore.width > 0.1) {
-                console.log('w', intersectionBefore.width);
-              }
-            }
 
             if (intersectionAfter !== null && intersectionAfter.collision) {
               if (intersectionBefore !== null) {
@@ -107,7 +104,7 @@
       }
 
     }
-
+    self.resetDisplay();
   };
 
 })(typeof exports === 'undefined' ? this['cubeShare'] = {} : exports);

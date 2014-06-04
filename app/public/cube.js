@@ -5,11 +5,6 @@
 
   var Cube = function(world) {
     this.initialize(world);
-    this.teleport = {
-      enter: 200,
-      travel: 100,
-      leave: 200
-    };
   };
 
   Cube.prototype = new createjs.Shape();
@@ -19,30 +14,35 @@
   Cube.prototype.initialize = function(world) {
     this.Shape_initialize();
 
+    // The real server states, use by physics.
     this.states = null;
-    this.filled = false;
-    this.interpolation = null;
 
+    // The drawn states.
+    this.display = null;
+
+    this.notFilled = true;
     this.setBounds(-20, -20, 40, 40);
     world.addChild(this);
   };
 
   Cube.prototype.renderCanvas = function() {
-    if (!this.filled) {
+    if (this.notFilled) {
       this.graphics.beginFill(this.states.color).drawRect(-20, -20, 40, 40);
-      this.filled = true;
+      delete this.notFilled;
     }
-    if (this.interpolation !== null) {
-      this.scaleX = this.interpolation.scale;
-      this.scaleY = this.interpolation.scale;
-      this.x = this.interpolation.x;
-      this.y = this.interpolation.y;
-    } else {
-      this.scaleX = this.states.scale;
-      this.scaleY = this.states.scale;
-      this.x = this.states.x;
-      this.y = this.states.y;
-    }
+    this.scaleX = this.display.scale;
+    this.scaleY = this.display.scale;
+    this.x = this.display.x;
+    this.y = this.display.y;
+  };
+
+  Cube.prototype.resetDisplay = function() {
+    var self = this;
+    this.display = {
+      x: self.states.x,
+      y: self.states.y,
+      scale: self.states.scale
+    };
   };
 
   Cube.prototype.applyInput = function(input, world) {
@@ -53,23 +53,13 @@
     cubeShare.applyInput(this, input, world, shared);
   };
 
-  Cube.prototype.interpolate = function(states, time) {
-    var self = this;
+  Cube.prototype.interpolate = function(time) {
     createjs.Tween.removeTweens(this);
     var threshold = Math.min(1, time / 200);
-    var scale = states.scale < threshold ? 0 : states.scale;
-    this.interpolation = this.states;
-    this.states = states;
+    var scale = this.states.scale < threshold ? 0 : this.states.scale;
 
-    var callback = function() {
-      self.interpolation = null;
-    };
 
-    if (scale < 1) {
-      createjs.Tween.get(this.interpolation).to({scale: scale}, time, createjs.Ease.linear).call(callback);
-    } else {
-      createjs.Tween.get(this.interpolation).to({x: states.x, y: states.y, scale: scale}, time, createjs.Ease.linear).call(callback);
-    }
+    createjs.Tween.get(this.display).to({x: this.states.x, y: this.states.y, scale: scale}, time, createjs.Ease.linear);
 
   };
 
