@@ -36,10 +36,9 @@ Real Time
 - [ ] Collision
   - [x] ~~Server side~~
   - [x] ~~Prediction~~
-  - [ ] Reconciliation
-  - [ ] Bugs
+  - [x] ~~Reconciliation~~
+  - [x] Bugs
     - [x] Dodge from bot to top
     - [x] Flickering with reconciliation
-    - [ ] Small jump with reconciliation
-- [ ] Fire !!!
+- [x] Fire !!!
 - [ ] Lag compensation

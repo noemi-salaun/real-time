@@ -1,5 +1,5 @@
 (function(exports) {
-  
+
   var teleport = {
     enter: 200,
     travel: 100,
@@ -65,6 +65,30 @@
       }
       if (self.states.teleport.leave >= teleport.leave) {
         self.states.teleport.inProgress = false;
+      }
+    }
+
+    console.log(shared.cube.getBounds(self));
+
+    self.states.hit = Math.max(self.states.hit - input.meta.interval, 0);
+    self.states.fire = input.fire && !self.states.teleport.inProgress;
+    if (self.states.fire) {
+      var fBounds = {
+        x: self.states.x + 120,
+        y: self.states.y,
+        width: 200,
+        height: 4
+      };
+      console.log(fBounds);
+      for (var i in world) {
+        var cube = world[i];
+        if (cube !== self) {
+          var cBounds = shared.cube.getBounds(cube);
+          var intersection = shared.utils.calculateIntersection(fBounds, cBounds);
+          if (intersection !== null && intersection.collision) {
+            cube.states.hit = 500;
+          }
+        }
       }
     }
 

@@ -150,7 +150,8 @@ var i = 0;
       right: this.input.right ? 1 : 0,
       down: this.input.down ? 1 : 0,
       left: this.input.left ? 1 : 0,
-      teleport: this.input.teleport ? 1 : 0
+      teleport: this.input.teleport ? 1 : 0,
+      fire: this.input.fire ? 1 : 0
     };
 
     this.socket.emit('input', input);

@@ -3,15 +3,16 @@
 var cubeShare = require(global.SHARED_DIR + '/cube');
 var utilsShare = require(global.SHARED_DIR + '/utils');
 
-var colors = ['red', 'blue', 'green', 'grey'];
+var colors = ['red', 'blue', 'green'];
 
 function Cube() {
   this.initialize();
 }
 
 Cube.prototype.initialize = function() {
-  var random = Math.floor(Math.random() * (colors.length - 1));
+  var random = Math.floor(Math.random() * (colors.length));
   this.states = {
+    hit: 0,
     color: colors[random],
     x: 200,
     y: 100,
@@ -30,7 +31,9 @@ Cube.prototype.resetDisplay = function() {
   this.display = {
     x: self.states.x,
     y: self.states.y,
-    scale: self.states.scale
+    scale: self.states.scale,
+    hit: self.states.hit,
+    fire: self.states.fire
   };
 };
 
