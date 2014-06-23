@@ -25,7 +25,11 @@ Real Time
 ### To build, test, make coffee and start the server
 
     grunt
-    
+
+It is possible to setup the refresh rate and latency in the file [`app/server/server.js`](https://github.com/Duvo/real-time/blob/master/app/server/server.js) :
+
+    var game = new Game(<refresh rate>, io.sockets, <latency>);
+
 ## Todos
 
 - [x] ~~Client-side prediction~~
