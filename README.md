@@ -33,12 +33,12 @@ Real Time
 - [x] ~~Separate client~~
 - [x] ~~Multiplayer~~
 - [x] ~~Interpolation~~
-- [ ] Collision
+- [x] ~~Collision~~
   - [x] ~~Server side~~
   - [x] ~~Prediction~~
   - [x] ~~Reconciliation~~
   - [x] Bugs
-    - [x] Dodge from bot to top
-    - [x] Flickering with reconciliation
-- [x] Fire !!!
+    - [x] ~~Dodge from bot to top~~
+    - [x] ~~Flickering with reconciliation~~
+- [x] ~~Fire !!!~~
 - [ ] Lag compensation
