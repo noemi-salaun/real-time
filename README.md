@@ -37,7 +37,7 @@ Real Time
   - [x] ~~Server side~~
   - [x] ~~Prediction~~
   - [x] ~~Reconciliation~~
-  - [x] Bugs
+  - [x] ~~Bugs~~
     - [x] ~~Dodge from bot to top~~
     - [x] ~~Flickering with reconciliation~~
 - [x] ~~Fire !!!~~
