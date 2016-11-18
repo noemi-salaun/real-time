@@ -12,7 +12,6 @@ Real Time
 
 - Node.js - [nodejs.org](http://nodejs.org/)
 - npm - [www.npmjs.org](https://www.npmjs.org/)
-- The [GruntJS](http://gruntjs.com/getting-started#installing-the-cli) command line interface - `npm install grunt-cli -g`
 
 ### Clone the repository
 
@@ -24,7 +23,7 @@ Real Time
     
 ### To build, test, make coffee and start the server
 
-    grunt
+    npm start
 
 It is possible to setup the refresh rate and latency in the file [`app/server/server.js`](https://github.com/Duvo/real-time/blob/master/app/server/server.js) :
 

@@ -1,5 +1,6 @@
 ##### Node.js #####
 node_modules
+npm-debug.log
 
 ##### Bower #####
 bower_components
@@ -7,6 +8,9 @@ bower_components
 ##### Code editors #####
 ## Netbeans ##
 .netbeans.xml
+
+## WebStorm ##
+.idea
 
 ##### OS #####
 ## Linux ##

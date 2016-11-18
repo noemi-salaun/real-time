@@ -2,8 +2,8 @@
 	"name": "real-time",
 	"version": "0.1.0",
 	"dependencies": {
-		"easeljs": "*",
-		"createjs-tweenjs": "*"
+		"EaselJS": "0.7.1",
+		"TweenJS": "0.5.1"
 	},
 	"devDependencies": {}
 }
